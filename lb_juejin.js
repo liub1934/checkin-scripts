@@ -16,15 +16,15 @@ const { getUserAgent } = require('./utils/userAgent')
 const { sendNotify } = require('./utils/sendNotify')
 
 const API = 'https://api.juejin.cn/growth_api/v1'
-const PLATFORM = getPlatform('JUEJIN').name
-const titleText = getTitleText(PLATFORM)
-const cookie = getEnv(`COOKIE_${PLATFORM}`)
+const { platform } = getPlatform('JUEJIN')
+const titleText = getTitleText(platform)
+const cookie = getEnv(`${platform}_COOKIE`)
 const defaultOptions = {
   headers: {
     cookie,
     origin: 'https://juejin.cn',
     referer: 'https://juejin.cn/',
-    'user-agent': getUserAgent(PLATFORM)
+    'user-agent': getUserAgent(platform)
   }
 }
 

@@ -16,16 +16,16 @@ const { getUserAgent } = require('./utils/userAgent')
 const { sendNotify } = require('./utils/sendNotify')
 
 const API = 'https://zhiyou.smzdm.com/user/checkin/jsonp_checkin'
-const PLATFORM = getPlatform('SMZDM').name
-const titleText = getTitleText(PLATFORM)
-const Cookie = getEnv(`COOKIE_${PLATFORM}`)
+const { platform } = getPlatform('SMZDM')
+const titleText = getTitleText(platform)
+const Cookie = getEnv(`${platform}_COOKIE`)
 
 const defaultOptions = {
   headers: {
     Cookie,
     Referer: 'https://www.smzdm.com/',
     Host: 'www.smzdm.com',
-    'User-Agent': getUserAgent(PLATFORM)
+    'User-Agent': getUserAgent(platform)
   }
 }
 
