@@ -1,6 +1,6 @@
 /**
  * 什么值得买签到
- * 0 0 * * *
+ * cron: 0 0 * * *
  */
 
 const axios = require('axios')
