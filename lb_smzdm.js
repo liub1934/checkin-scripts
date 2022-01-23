@@ -9,8 +9,10 @@ const {
   getTitleText,
   getErrorText,
   getPlatform,
+  sleep,
   expiredCookie,
-  noCookie
+  noCookie,
+  sleepTime
 } = require('./utils/index')
 const { getUserAgent } = require('./utils/userAgent')
 const { sendNotify } = require('./utils/sendNotify')
@@ -71,6 +73,7 @@ function checkIn () {
   }
   const msg = []
   try {
+    await sleep(sleepTime)
     const { checkin_num } = await checkIn()
     msg.push(`签到成功：已连续签到${checkin_num}天✔️`)
   } catch (error) {}

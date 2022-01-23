@@ -38,8 +38,13 @@ const getErrorText = msg => {
   return `签到异常❌\n${msg}`
 }
 
+const sleep = time => {
+  return new Promise(resolve => setTimeout(resolve, time))
+}
+
 const expiredCookie = '登录状态已过期❌'
 const noCookie = '未填写Cookie❌'
+const sleepTime = getRandom(5000, 10000)
 
 module.exports = {
   getRandom,
@@ -48,6 +53,8 @@ module.exports = {
   getTitleText,
   getErrorText,
   getPlatform,
+  sleep,
   expiredCookie,
-  noCookie
+  noCookie,
+  sleepTime
 }

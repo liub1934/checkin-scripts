@@ -9,8 +9,10 @@ const {
   getTitleText,
   getErrorText,
   getPlatform,
+  sleep,
   expiredCookie,
-  noCookie
+  noCookie,
+  sleepTime
 } = require('./utils/index')
 const { getUserAgent } = require('./utils/userAgent')
 const { sendNotify } = require('./utils/sendNotify')
@@ -112,6 +114,7 @@ function dipLucky (lottery_history_id) {
   }
   const msg = []
   try {
+    await sleep(sleepTime)
     const statusData = await getTodayStatus()
     if (statusData) {
       msg.push('今天已经签到过了❗️')
@@ -121,6 +124,7 @@ function dipLucky (lottery_history_id) {
         msg.push('签到成功✔️')
       }
     }
+    await sleep(sleepTime)
     const { free_count } = await lotteryConfig()
     if (free_count) {
       const { lottery_name } = await lotteryDraw()
@@ -132,6 +136,7 @@ function dipLucky (lottery_history_id) {
     const lotteryIndex = getEnv('JUEJIN_LOTTERY_INDEX') || 0
     const historyId = lotteries[lotteryIndex].history_id
     if (historyId) {
+      await sleep(sleepTime)
       const { has_dip, dip_action, total_value } = await dipLucky(historyId)
       const luckValue = `当前喜气值: ${total_value}/6000`
       if (has_dip) {
