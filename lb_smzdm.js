@@ -24,7 +24,7 @@ const defaultOptions = {
   headers: {
     Cookie,
     Referer: 'https://www.smzdm.com/',
-    Host: 'www.smzdm.com',
+    Host: 'zhiyou.smzdm.com',
     'User-Agent': getUserAgent(platform)
   }
 }
