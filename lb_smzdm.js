@@ -76,7 +76,9 @@ function checkIn () {
     await sleep(sleepTime)
     const { checkin_num } = await checkIn()
     msg.push(`签到成功：已连续签到${checkin_num}天✔️`)
-  } catch (error) {}
+  } catch (error) {
+    console.log('❌error❌', error)
+  }
   if (msg.length) {
     if (msg.length) {
       sendNotify(titleText, msg.join('\n'))

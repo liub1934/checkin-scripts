@@ -51,7 +51,7 @@ const request = (options = {}) => {
         }
       })
       .catch(err => {
-        sendNotify(titleText, getErrorText(data.message))
+        sendNotify(titleText, getErrorText(err.message))
         reject(err)
       })
   })
@@ -149,7 +149,9 @@ function dipLucky (lottery_history_id) {
         `获取沾喜气historyId异常，请检查指定的JUEJIN_LOTTERY_INDEX参数格式❌`
       )
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log('❌error❌', error)
+  }
   if (msg.length) {
     sendNotify(titleText, msg.join('\n'))
   }

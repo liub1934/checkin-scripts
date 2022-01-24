@@ -44,7 +44,7 @@ const sleep = time => {
 
 const expiredCookie = '登录状态已过期❌'
 const noCookie = '未填写Cookie❌'
-const sleepTime = getRandom(5000, 10000)
+const sleepTime = getRandom(500, 2000)
 
 module.exports = {
   getRandom,
