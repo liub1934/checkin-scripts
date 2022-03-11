@@ -34,7 +34,7 @@ const request = (options = {}) => {
   options = { ...defaultOptions, ...options }
   return new Promise((resolve, reject) => {
     axios(options)
-      .then(res => {
+      .then((res) => {
         const data = res.data || {}
         switch (data.err_no) {
           case 0:
@@ -50,7 +50,7 @@ const request = (options = {}) => {
             break
         }
       })
-      .catch(err => {
+      .catch((err) => {
         sendNotify(titleText, getErrorText(err.message))
         reject(err)
       })
@@ -58,7 +58,7 @@ const request = (options = {}) => {
 }
 
 // 获取是否签过
-function getTodayStatus () {
+function getTodayStatus() {
   return request({
     method: 'get',
     url: `${API}/get_today_status`
@@ -66,7 +66,7 @@ function getTodayStatus () {
 }
 
 // 签到
-function checkIn () {
+function checkIn() {
   return request({
     method: 'post',
     url: `${API}/check_in`
@@ -74,7 +74,7 @@ function checkIn () {
 }
 
 // 获取是否有免费抽奖机会
-function lotteryConfig () {
+function lotteryConfig() {
   return request({
     method: 'get',
     url: `${API}/lottery_config/get`
@@ -82,7 +82,7 @@ function lotteryConfig () {
 }
 
 // 抽奖
-function lotteryDraw () {
+function lotteryDraw() {
   return request({
     method: 'post',
     url: `${API}/lottery/draw`
@@ -90,7 +90,7 @@ function lotteryDraw () {
 }
 
 // 获取沾喜气列表
-function getDipLuckyList () {
+function getDipLuckyList() {
   return request({
     method: 'post',
     url: `${API}/lottery_history/global_big`,
@@ -99,11 +99,28 @@ function getDipLuckyList () {
 }
 
 // 沾喜气
-function dipLucky (lottery_history_id) {
+function dipLucky(lottery_history_id) {
   return request({
     method: 'post',
     url: `${API}/lottery_lucky/dip_lucky`,
     data: { lottery_history_id }
+  })
+}
+
+// 获取未收集的bug
+function getBugList() {
+  return request({
+    method: 'post',
+    url: `${API}/bugfix/not_collect`
+  })
+}
+
+// 获取未收集的bug
+function collectBug(bug_time, bug_type) {
+  return request({
+    method: 'post',
+    url: `${API}/bugfix/collect`,
+    data: { bug_time, bug_type }
   })
 }
 
@@ -148,6 +165,18 @@ function dipLucky (lottery_history_id) {
       msg.push(
         `获取沾喜气historyId异常，请检查指定的JUEJIN_LOTTERY_INDEX参数格式❌`
       )
+    }
+    await sleep(sleepTime)
+    const bugList = await getBugList()
+    if (bugList.length) {
+      for (let i = 0; i < bugList.length; i++) {
+        const { bug_time, bug_type } = bugList[i]
+        await collectBug(bug_time, bug_type)
+        await sleep(sleepTime)
+      }
+      msg.push(`收集${bugList.length}个bug✔️`)
+    } else {
+      msg.push('暂无可收集的bug❗️')
     }
   } catch (error) {
     console.log('❌error❌', error)
