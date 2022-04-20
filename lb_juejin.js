@@ -16,8 +16,8 @@ const {
 } = require('./utils/index')
 const { getUserAgent } = require('./utils/userAgent')
 const { sendNotify } = require('./utils/sendNotify')
-
-const API = 'https://api.juejin.cn/growth_api/v1'
+const GROWTH_API = 'https://api.juejin.cn/growth_api/v1'
+const USER_API = 'https://api.juejin.cn/user_api/v1'
 const { platform } = getPlatform('JUEJIN')
 const titleText = getTitleText(platform)
 const cookie = getEnv(`${platform}_COOKIE`)
@@ -61,7 +61,7 @@ const request = (options = {}) => {
 function getTodayStatus() {
   return request({
     method: 'get',
-    url: `${API}/get_today_status`
+    url: `${GROWTH_API}/get_today_status`
   })
 }
 
@@ -69,7 +69,7 @@ function getTodayStatus() {
 function checkIn() {
   return request({
     method: 'post',
-    url: `${API}/check_in`
+    url: `${GROWTH_API}/check_in`
   })
 }
 
@@ -77,7 +77,7 @@ function checkIn() {
 function lotteryConfig() {
   return request({
     method: 'get',
-    url: `${API}/lottery_config/get`
+    url: `${GROWTH_API}/lottery_config/get`
   })
 }
 
@@ -85,7 +85,7 @@ function lotteryConfig() {
 function lotteryDraw() {
   return request({
     method: 'post',
-    url: `${API}/lottery/draw`
+    url: `${GROWTH_API}/lottery/draw`
   })
 }
 
@@ -93,7 +93,7 @@ function lotteryDraw() {
 function getDipLuckyList() {
   return request({
     method: 'post',
-    url: `${API}/lottery_history/global_big`,
+    url: `${GROWTH_API}/lottery_history/global_big`,
     data: { page_no: 1, page_size: 5 }
   })
 }
@@ -102,7 +102,7 @@ function getDipLuckyList() {
 function dipLucky(lottery_history_id) {
   return request({
     method: 'post',
-    url: `${API}/lottery_lucky/dip_lucky`,
+    url: `${GROWTH_API}/lottery_lucky/dip_lucky`,
     data: { lottery_history_id }
   })
 }
@@ -111,7 +111,7 @@ function dipLucky(lottery_history_id) {
 function getBugList() {
   return request({
     method: 'post',
-    url: `${API}/bugfix/not_collect`
+    url: `${USER_API}/bugfix/not_collect`
   })
 }
 
@@ -119,7 +119,7 @@ function getBugList() {
 function collectBug(bug_time, bug_type) {
   return request({
     method: 'post',
-    url: `${API}/bugfix/collect`,
+    url: `${USER_API}/bugfix/collect`,
     data: { bug_time, bug_type }
   })
 }
