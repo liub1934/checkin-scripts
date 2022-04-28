@@ -8,7 +8,6 @@ const {
   getEnv,
   getTitleText,
   getErrorText,
-  getPlatform,
   sleep,
   expiredCookie,
   noCookie,
@@ -18,8 +17,9 @@ const { getUserAgent } = require('./utils/userAgent')
 const { sendNotify } = require('./utils/sendNotify')
 
 const API = 'https://zhiyou.smzdm.com/user/checkin/jsonp_checkin'
-const { platform } = getPlatform('SMZDM')
-const titleText = getTitleText(platform)
+const platform = 'SMZDM'
+const platformName = '什么值得买'
+const titleText = getTitleText(platformName)
 const Cookie = getEnv(`${platform}_COOKIE`)
 
 const defaultOptions = {
@@ -35,7 +35,7 @@ const request = (options = {}) => {
   options = { ...defaultOptions, ...options }
   return new Promise((resolve, reject) => {
     axios(options)
-      .then(res => {
+      .then((res) => {
         const data = res.data || {}
         switch (data.error_code) {
           case 0:
@@ -51,7 +51,7 @@ const request = (options = {}) => {
             break
         }
       })
-      .catch(err => {
+      .catch((err) => {
         sendNotify(titleText, getErrorText(err.message))
         reject(err)
       })
@@ -59,7 +59,7 @@ const request = (options = {}) => {
 }
 
 // 签到
-function checkIn () {
+function checkIn() {
   return request({
     method: 'get',
     url: API

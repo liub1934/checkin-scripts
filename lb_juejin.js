@@ -8,7 +8,6 @@ const {
   getEnv,
   getTitleText,
   getErrorText,
-  getPlatform,
   sleep,
   expiredCookie,
   noCookie,
@@ -18,8 +17,9 @@ const { getUserAgent } = require('./utils/userAgent')
 const { sendNotify } = require('./utils/sendNotify')
 const GROWTH_API = 'https://api.juejin.cn/growth_api/v1'
 const USER_API = 'https://api.juejin.cn/user_api/v1'
-const { platform } = getPlatform('JUEJIN')
-const titleText = getTitleText(platform)
+const platform = 'JUEJIN'
+const platformName = '掘金'
+const titleText = getTitleText(platformName)
 const cookie = getEnv(`${platform}_COOKIE`)
 const defaultOptions = {
   headers: {
