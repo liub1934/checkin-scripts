@@ -10,7 +10,6 @@ const {
   getErrorText,
   sleep,
   expiredCookie,
-  noCookie,
   sleepTime
 } = require('./utils/index')
 const { getUserAgent } = require('./utils/userAgent')
@@ -20,8 +19,11 @@ const API = 'https://webapi.qmai.cn/web/catering'
 const platform = 'WAHAHA'
 const platformName = '娃哈哈Tea'
 const appid = 'wx621508020f94679c'
+const activityId = getEnv(`${platform}_ACTIVITY_ID`)
+const mobilePhone = getEnv(`${platform}_MOBILE_PHONE`)
+const userName = getEnv(`${platform}_USER_NAME`)
 const titleText = getTitleText(platformName)
-const Cookie = getEnv(`${platform}_COOKIE`)
+const token = getEnv(`${platform}_TOKEN`)
 
 const defaultOptions = {
   headers: {
@@ -31,7 +33,7 @@ const defaultOptions = {
     'store-id': '49703',
     'Qm-From-Type': 'catering',
     'Qm-From': 'wechat',
-    'Qm-User-Token': Cookie
+    'Qm-User-Token': token
   }
 }
 
@@ -44,11 +46,6 @@ const request = (options = {}) => {
         switch (data.code) {
           case 0:
             resolve(data.data)
-            break
-          // 已签到
-          case 400041:
-            sendNotify(titleText, getErrorText(data.message))
-            reject(data)
             break
           // 登录过期
           case 9001:
@@ -93,34 +90,49 @@ function signIn() {
     url: `${API}/integral/sign/signIn`,
     data: {
       appid,
-      activityId: '100820000000000615',
-      mobilePhone: '17610086113',
-      userName: '寻梦'
+      activityId,
+      mobilePhone,
+      userName
     }
   })
 }
 
 ;(async () => {
-  if (!Cookie) {
-    console.log(noCookie)
+  if (!token) {
+    console.log('no token ❌')
+    return
+  }
+  if (!activityId) {
+    console.log('no activityId ❌')
+    return
+  }
+  if (!mobilePhone) {
+    console.log('no mobilePhone ❌')
+    return
+  }
+  if (!userName) {
+    console.log('no userName ❌')
     return
   }
   const msg = []
   try {
     await sleep(sleepTime)
-    await signIn()
+    const { intraDay } = await getCheckDetail()
+    const tip = intraDay === 1 ? '当前已签到过了' : '签到成功'
+    if (intraDay !== 1) {
+      await sleep(sleepTime)
+      await signIn()
+    }
     await sleep(sleepTime)
     const { totalDays, continuityTotal } = await getCheckDetail()
     const points = await getPoints()
     msg.push(
-      `签到成功：已累计签到${totalDays}天，已连续签到${continuityTotal}天，当前积分${points}✔️`
+      `${tip}：已累计签到${totalDays}天，已连续签到${continuityTotal}天，当前积分${points}✔️`
     )
   } catch (error) {
     console.log('❌error❌', error)
   }
   if (msg.length) {
-    if (msg.length) {
-      sendNotify(titleText, msg.join('\n'))
-    }
+    sendNotify(titleText, msg.join('\n'))
   }
 })()

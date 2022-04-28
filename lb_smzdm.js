@@ -80,8 +80,6 @@ function checkIn() {
     console.log('❌error❌', error)
   }
   if (msg.length) {
-    if (msg.length) {
-      sendNotify(titleText, msg.join('\n'))
-    }
+    sendNotify(titleText, msg.join('\n'))
   }
 })()
