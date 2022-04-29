@@ -96,7 +96,7 @@ function immediatelySign() {
         todayGiveCouponCount,
         todayGivePoints,
         vipPoints
-      } = immediatelySign()
+      } = await immediatelySign()
       msg.push(
         `签到成功：获得${todayGivePoints}个积分，${todayGiveCouponCount}张优惠券，已连续签到${contiCheckDays}天，当前积分${vipPoints} ✔️`
       )
